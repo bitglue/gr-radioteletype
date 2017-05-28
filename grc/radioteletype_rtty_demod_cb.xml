@@ -63,6 +63,21 @@
     <type>byte</type>
     <vlen>1</vlen>
   </source>
+  <source>
+    <name>detector</name>
+    <type>float</type>
+    <vlen>1</vlen>
+  </source>
+  <source>
+    <name>mark</name>
+    <type>float</type>
+    <vlen>1</vlen>
+  </source>
+  <source>
+    <name>space</name>
+    <type>float</type>
+    <vlen>1</vlen>
+  </source>
   <doc>/home/indigo/.grc_gnuradio/rtty_demod.py</doc>
   <grc_source>/home/indigo/Documents/gr-radioteletype/rtty_demod.grc</grc_source>
 </block>

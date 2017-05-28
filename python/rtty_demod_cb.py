@@ -18,7 +18,7 @@ class rtty_demod_cb(gr.hier_block2):
         gr.hier_block2.__init__(
             self, "RTTY Demod",
             gr.io_signature(1, 1, gr.sizeof_gr_complex),
-            gr.io_signature(1, 1, gr.sizeof_char),
+            gr.io_signature2(4, 4, gr.sizeof_char, gr.sizeof_float),
         )
 
         ##################################################
@@ -51,16 +51,16 @@ class rtty_demod_cb(gr.hier_block2):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self._word_extractor, 0), (self._baudot_decode, 0))
-        self.connect((self._baudot_decode, 0), (self, 0))
-        self.connect((self._mark_tone_detector, 0), (self._subtract, 0))
-        self.connect((self._space_tone_detector, 0), (self._subtract, 1))
-        self.connect((self._float_to_char, 0), (self._word_extractor, 0))
-        self.connect((self._subtract, 0), (self._dc_blocker, 0))
-        self.connect((self._threshold, 0), (self._float_to_char, 0))
-        self.connect((self._dc_blocker, 0), (self._threshold, 0))
-        self.connect((self, 0), (self._mark_tone_detector, 0))
-        self.connect((self, 0), (self._space_tone_detector, 0))
+        self.connect(self._word_extractor, self._baudot_decode, self)
+
+        self.connect(self, self._mark_tone_detector, self._subtract)
+        self.connect(self, self._space_tone_detector, (self._subtract, 1))
+
+        self.connect(self._subtract, self._dc_blocker, self._threshold, self._float_to_char, self._word_extractor)
+
+        self.connect(self._dc_blocker, (self, 1))
+        self.connect(self._mark_tone_detector, (self, 2))
+        self.connect(self._space_tone_detector, (self, 3))
 
     def get_alpha(self):
         return self.alpha
