@@ -1,0 +1,24 @@
+                               _ _       _       _      _                    
+  __ _ _ __      _ __ __ _  __| (_) ___ | |_ ___| | ___| |_ _   _ _ __   ___ 
+ / _` | '__|____| '__/ _` |/ _` | |/ _ \| __/ _ \ |/ _ \ __| | | | '_ \ / _ \
+| (_| | | |_____| | | (_| | (_| | | (_) | ||  __/ |  __/ |_| |_| | |_) |  __/
+ \__, |_|       |_|  \__,_|\__,_|_|\___/ \__\___|_|\___|\__|\__, | .__/ \___|
+ |___/                                                      |___/|_|         
+
+
+A GNU Radio module for demodulating radioteletype, AKA RTTY.
+
+See the examples directory in particular. Be sure to run rtty_demod.py from the
+examples directory. Otherwise it will be unable to open ./rtty.wav.
+
+The module contains four blocks:
+
+rtty_demod: A hierarchical block putting all the blocks herein for a complete
+RTTY demodulator.
+
+async_word_extractor: Recover words from an asynchronous bit stream. This might
+also find application with other asynchronous serial protocols such as RS-232.
+
+tone_detector: The envelope detector for individual tones (mark and space).
+
+baudot_decode: Convert Baudot into ASCII.

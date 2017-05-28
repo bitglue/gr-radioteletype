@@ -1,0 +1,15 @@
+<block>
+  <name>Baudot Decode</name>
+  <key>baudot_decode_bb</key>
+  <category>[Radioteletype]</category>
+  <import>import radioteletype</import>
+  <make>radioteletype.baudot_decode_bb()</make>
+  <sink>
+    <name>in</name>
+    <type>byte</type>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>byte</type>
+  </source>
+</block>
