@@ -39,7 +39,6 @@ class rtty_demod_cb(gr.hier_block2):
         ##################################################
         # Blocks
         ##################################################
-        self._dc_blocker = filter.dc_blocker_ff(int(samp_per_sym*100), True)
         self._threshold = blocks.threshold_ff(0, 0, 0)
         self._subtract = blocks.sub_ff(1)
         self._float_to_char = blocks.float_to_char(1, 1)
@@ -56,9 +55,9 @@ class rtty_demod_cb(gr.hier_block2):
         self.connect(self, self._mark_tone_detector, self._subtract)
         self.connect(self, self._space_tone_detector, (self._subtract, 1))
 
-        self.connect(self._subtract, self._dc_blocker, self._threshold, self._float_to_char, self._word_extractor)
+        self.connect(self._subtract, self._threshold, self._float_to_char, self._word_extractor)
 
-        self.connect(self._dc_blocker, (self, 1))
+        self.connect(self._subtract, (self, 1))
         self.connect(self._mark_tone_detector, (self, 2))
         self.connect(self._space_tone_detector, (self, 3))
 
