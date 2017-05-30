@@ -31,6 +31,7 @@ endif()
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
+    radioteletype_filters.py
     tone_detector_cf.py
     rtty_demod_cb.py DESTINATION ${GR_PYTHON_DIR}/radioteletype
 )

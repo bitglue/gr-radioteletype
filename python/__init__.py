@@ -23,3 +23,4 @@ demodulators.
 from radioteletype_swig import *
 from tone_detector_cf import tone_detector_cf
 from rtty_demod_cb import rtty_demod_cb
+from radioteletype_filters import raised_cos, extended_raised_cos
