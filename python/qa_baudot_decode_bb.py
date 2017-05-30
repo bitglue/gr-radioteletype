@@ -109,23 +109,38 @@ class qa_baudot_decode_bb (gr_unittest.TestCase):
     def tearDown (self):
         self.tb = None
 
-    def test_001_t (self):
-        src_data = map(inverse_letter_map.__getitem__, 'THE QUICK BROWN FOX ')
-        src_data.append(0x1b)
-        src_data.extend(map(inverse_figure_map.__getitem__, '0123456789'))
-        src_data.append(0x1f)
-        src_data.extend(map(inverse_letter_map.__getitem__, ' JUMPS OVER THE LAZY DOG\r\n'))
-
+    def _test(self, src_data, block):
         src = blocks.vector_source_b(src_data)
-        decoder = radioteletype.baudot_decode_bb()
         dst = blocks.vector_sink_b()
-        self.tb.connect(src, decoder)
-        self.tb.connect(decoder, dst)
+        self.tb.connect(src, block, dst)
         self.tb.run()
-        result = dst.data()
+        return dst.data()
 
-        self.assertEqual(map(chr, result), list('THE QUICK BROWN FOX 0123456789 JUMPS OVER THE LAZY DOG\r\n'))
+    _baudot = map(inverse_letter_map.__getitem__, 'THE QUICK BROWN FOX ')
+    _baudot.append(0x1b)
+    _baudot.extend(map(inverse_figure_map.__getitem__, '0123456789'))
+    _baudot.append(0x1f)
+    _baudot.extend(map(inverse_letter_map.__getitem__, ' JUMPS OVER THE LAZY DOG\r\n'))
+    _ascii = 'THE QUICK BROWN FOX 0123456789 JUMPS OVER THE LAZY DOG\r\n'
+
+    def test_decode(self):
+        decoder = radioteletype.baudot_decode_bb()
+        result = self._test(self._baudot, decoder)
+        self.assertEqual(''.join(map(chr, result)), self._ascii)
+
+    def test_encode(self):
+        encoder = radioteletype.baudot_encode_bb()
+        result = self._test(map(ord, self._ascii), encoder)
+        self.assertEqual(list(result), self._baudot)
+
+    def test_encode_invalid_chars(self):
+        src_data = range(0x7B, 0x100)
+        encoder = radioteletype.baudot_encode_bb()
+        result = self._test(src_data, encoder)
+        self.assertEqual(list(result), [])
+
 
 
 if __name__ == '__main__':
     gr_unittest.run(qa_baudot_decode_bb, "qa_baudot_decode_bb.xml")
+    gr_unittest.run(qa_baudot_encode_bb, "qa_baudot_encode_bb.xml")

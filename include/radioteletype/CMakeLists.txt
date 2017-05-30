@@ -23,5 +23,6 @@
 install(FILES
     api.h
     async_word_extractor_bb.h
-    baudot_decode_bb.h DESTINATION include/radioteletype
+    baudot_decode_bb.h
+    baudot_encode_bb.h DESTINATION include/radioteletype
 )
