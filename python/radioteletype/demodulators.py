@@ -1,19 +1,13 @@
 # -*- coding: utf-8 -*-
-##################################################
-# GNU Radio Python Flow Graph
-# Title: RTTY Demod
-# Generated: Sun May 28 08:00:29 2017
-##################################################
 
 from gnuradio import blocks
-from gnuradio import filter
 from gnuradio import gr
-from gnuradio.filter import firdes
-import radioteletype
+from gnuradio.filter import freq_xlating_fft_filter_ccc
+from radioteletype.filters import extended_raised_cos
+from radioteletype_swig import async_word_extractor_bb, baudot_decode_bb
 
 
 class rtty_demod_cb(gr.hier_block2):
-
     def __init__(self, alpha=0.35, baud=45.45, decimation=1, mark_freq=2295, samp_rate=48000, space_freq=2125):
         gr.hier_block2.__init__(
             self, "RTTY Demod",
@@ -32,20 +26,15 @@ class rtty_demod_cb(gr.hier_block2):
         self.space_freq = space_freq
 
         ##################################################
-        # Variables
-        ##################################################
-        self.samp_per_sym = samp_per_sym = samp_rate/baud/decimation
-
-        ##################################################
         # Blocks
         ##################################################
         self._threshold = blocks.threshold_ff(0, 0, 0)
         self._subtract = blocks.sub_ff(1)
         self._float_to_char = blocks.float_to_char(1, 1)
-        self._space_tone_detector = radioteletype.tone_detector_cf(decimation, space_freq, samp_rate, baud, 0.35)
-        self._mark_tone_detector = radioteletype.tone_detector_cf(decimation, mark_freq, samp_rate, baud, 0.35)
-        self._baudot_decode = radioteletype.baudot_decode_bb()
-        self._word_extractor = radioteletype.async_word_extractor_bb(5, samp_rate/decimation, baud)
+        self._space_tone_detector = tone_detector_cf(decimation, space_freq, samp_rate, baud, 0.35)
+        self._mark_tone_detector = tone_detector_cf(decimation, mark_freq, samp_rate, baud, 0.35)
+        self._baudot_decode = baudot_decode_bb()
+        self._word_extractor = async_word_extractor_bb(5, samp_rate/decimation, baud)
 
         ##################################################
         # Connections
@@ -100,8 +89,65 @@ class rtty_demod_cb(gr.hier_block2):
     def set_space_freq(self, space_freq):
         self.space_freq = space_freq
 
-    def get_samp_per_sym(self):
-        return self.samp_per_sym
 
-    def set_samp_per_sym(self, samp_per_sym):
-        self.samp_per_sym = samp_per_sym
+class tone_detector_cf(gr.hier_block2):
+    """Detector for a single tone of an FSK signal."""
+    def __init__(self, decim, center_freq, sample_rate, baud_rate, alpha=0.35):
+        gr.hier_block2.__init__(self,
+            "tone_detector_cf",
+            gr.io_signature(1, 1, gr.sizeof_gr_complex),
+            gr.io_signature(1, 1, gr.sizeof_float))
+
+        self.center_freq = center_freq
+        self.sample_rate = sample_rate
+        self.baud_rate = baud_rate
+        self.alpha = alpha
+
+        self._filter = freq_xlating_fft_filter_ccc(
+            int(decim),
+            self._taps(),
+            float(center_freq),
+            float(sample_rate))
+        self._mag = blocks.complex_to_mag_squared()
+
+        self.connect(self, self._filter, self._mag, self)
+
+    def _taps(self):
+        samples_per_sym = self.sample_rate / self.baud_rate
+        taps = extended_raised_cos(
+            gain=1.0,
+            sampling_freq=self.sample_rate,
+            symbol_rate=self.baud_rate,
+            alpha=self.alpha,
+            ntaps=int(samples_per_sym)*11,
+            order=2)
+        return taps
+
+    def _refresh(self):
+        self._filter.set_taps(self._taps())
+        self._filter.set_decim(self.decim)
+        self._filter.set_center_freq(self.center_freq)
+
+    def set_center_freq(self, center_freq):
+        self.center_freq = center_freq
+        self._refresh()
+
+    def set_alpha(self, alpha):
+        self.alpha = alpha
+        self._refresh()
+
+    def set_nthreads(self, nthreads):
+        self._filter.set_nthreads(nthreads)
+        self._mag.set_nthreads(nthreads)
+
+    def declare_sample_delay(self, samp_delay):
+        self._filter.declare_sample_delay(samp_delay)
+        self._mag.declare_sample_delay(samp_delay)
+
+
+__all__ = [
+    'async_word_extractor_bb',
+    'baudot_decode_bb',
+    'rtty_demod_cb',
+    'tone_detector_cf',
+]

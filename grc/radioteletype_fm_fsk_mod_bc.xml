@@ -2,7 +2,7 @@
   <name>FM FSK Modulator</name>
   <key>fm_fsk_mod_bc</key>
   <category>[Radioteletype]</category>
-  <import>from radioteletype import fm_fsk_mod_bc</import>
+  <import>from radioteletype.modulators import fm_fsk_mod_bc</import>
   <make>fm_fsk_mod_bc(
     samp_per_bit=$samp_per_bit,
     samp_rate=$samp_rate,

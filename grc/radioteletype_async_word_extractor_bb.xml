@@ -3,7 +3,7 @@
   <key>radioteletype_async_word_extractor_bb</key>
   <category>[Radioteletype]</category>
   <import>import radioteletype</import>
-  <make>radioteletype.async_word_extractor_bb($bits_per_word, $sample_rate, $bit_rate)</make>
+  <make>radioteletype.demodulators.async_word_extractor_bb($bits_per_word, $sample_rate, $bit_rate)</make>
   <param>
     <name>Bits per Word</name>
     <key>bits_per_word</key>

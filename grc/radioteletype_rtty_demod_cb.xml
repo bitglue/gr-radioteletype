@@ -2,8 +2,8 @@
   <name>RTTY Demod</name>
   <key>radioteletype_rtty_demod_cb</key>
   <category>[Radioteletype]</category>
-  <import>import radioteletype</import>
-  <make>radioteletype.rtty_demod_cb(
+  <import>from radioteletype.demodulators import rtty_demod_cb</import>
+  <make>rtty_demod_cb(
     alpha=$alpha,
     baud=$baud,
     decimation=$decimation,

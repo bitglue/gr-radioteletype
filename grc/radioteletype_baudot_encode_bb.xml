@@ -2,8 +2,8 @@
   <name>Baudot Encode</name>
   <key>radioteletype_baudot_encode_bb</key>
   <category>[Radioteletype]</category>
-  <import>import radioteletype</import>
-  <make>radioteletype.baudot_encode_bb()</make>
+  <import>from radioteletype.modulators import baudot_encode_bb</import>
+  <make>baudot_encode_bb()</make>
   <sink>
     <name>in</name>
     <type>byte</type>

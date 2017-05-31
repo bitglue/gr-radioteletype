@@ -19,10 +19,3 @@
 These blocks can be used to implement a variety of radioteletype (RTTY)
 demodulators.
 '''
-
-from radioteletype_swig import *
-from tone_detector_cf import tone_detector_cf
-from rtty_demod_cb import rtty_demod_cb
-from radioteletype_filters import raised_cos, extended_raised_cos
-from am_fsk_mod_bc import am_fsk_mod_bc
-from fm_fsk_mod_bc import fm_fsk_mod_bc

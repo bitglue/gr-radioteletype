@@ -3,7 +3,7 @@
   <name>FSK Tone Detector</name>
   <key>radioteletype_tone_detector_cf</key>
   <category>[Radioteletype]</category>
-  <import>import radioteletype</import>
+  <import>from radioteletype.demodulators import tone_detector_cf</import>
   <make>radioteletype.tone_detector_cf($decim, $center_freq, $sample_rate, $baud_rate, $alpha)</make>
 
   <param>

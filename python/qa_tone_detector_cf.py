@@ -22,7 +22,7 @@ from __future__ import division
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
-from tone_detector_cf import tone_detector_cf
+from radioteletype.demodulators import tone_detector_cf
 
 
 class qa_async_word_extractor_bb(gr_unittest.TestCase):

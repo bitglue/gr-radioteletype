@@ -106,7 +106,7 @@ order increases, the result approaches hard keying.</value>
     </param>
     <param>
       <key>value</key>
-      <value>radioteletype.extended_raised_cos(1, samp_rate, baud_rate, alpha, samp_rate/baud_rate*8 ,2)</value>
+      <value>extended_raised_cos(1, samp_rate, baud_rate, alpha, samp_rate/baud_rate*8 ,2)</value>
     </param>
   </block>
   <block>
@@ -1015,7 +1015,7 @@ modulator, limiting the rise and fall times of the pulses.</value>
     </param>
     <param>
       <key>import</key>
-      <value>import radioteletype</value>
+      <value>from radioteletype.filters import extended_raised_cos</value>
     </param>
   </block>
   <block>

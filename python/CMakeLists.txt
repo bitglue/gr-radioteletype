@@ -30,12 +30,10 @@ endif()
 ########################################################################
 GR_PYTHON_INSTALL(
     FILES
-    __init__.py
-    radioteletype_filters.py
-    am_fsk_mod_bc.py
-    fm_fsk_mod_bc.py
-    tone_detector_cf.py
-    rtty_demod_cb.py DESTINATION ${GR_PYTHON_DIR}/radioteletype
+    radioteletype/__init__.py
+    radioteletype/filters.py
+    radioteletype/modulators.py
+    radioteletype/demodulators.py DESTINATION ${GR_PYTHON_DIR}/radioteletype
 )
 
 ########################################################################
