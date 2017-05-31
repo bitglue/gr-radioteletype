@@ -5,7 +5,9 @@
 # Generated: Wed May 31 05:55:33 2017
 ##################################################
 
-from gnuradio import blocks, filter, gr, analog
+from gnuradio import blocks, gr
+from gnuradio.filter import interp_fir_filter_fcc, interp_fir_filter_fff
+from gnuradio.analog import frequency_modulator_fc
 from math import pi
 
 from radioteletype_swig import baudot_encode_bb
@@ -22,7 +24,13 @@ class am_fsk_mod_bc(gr.hier_block2):
     However, the output of this modulator will not be constant modulus, and
     thus has more stringent requirements on amplifier linearity.
     """
-    def __init__(self, samp_per_bit=20, samp_rate=1000, spacing=170, taps=None):
+    def __init__(
+        self,
+        samp_per_bit=20,
+        samp_rate=1000,
+        spacing=170,
+        taps=None,
+    ):
         gr.hier_block2.__init__(
             self, "AM FSK Modulator",
             gr.io_signature(1, 1, gr.sizeof_char*1),
@@ -40,10 +48,14 @@ class am_fsk_mod_bc(gr.hier_block2):
         ##################################################
         # Blocks
         ##################################################
-        self._mark_filter = filter.interp_fir_filter_fcc(samp_per_bit, (self._taps()))
+        self._mark_filter = interp_fir_filter_fcc(samp_per_bit, (self._taps()))
         self._mark_filter.declare_sample_delay(0)
-        self._space_filter = filter.interp_fir_filter_fcc(samp_per_bit, (self._taps()))
+
+        self._space_filter = interp_fir_filter_fcc(
+            samp_per_bit, (self._taps())
+        )
         self._space_filter.declare_sample_delay(0)
+
         self._space_rotator = blocks.rotator_cc(2*pi*-spacing/samp_rate)
         self._char_to_float = blocks.char_to_float(1, 1)
         self._sum_mark_and_space = blocks.add_vcc(1)
@@ -149,8 +161,8 @@ class fm_fsk_mod_bc(gr.hier_block2):
         self._repeat = blocks.repeat(gr.sizeof_char, samp_per_bit)
         self._char_to_float = blocks.char_to_float(1, 1)
         self._add = blocks.add_const_vff((-1.0,))
-        self._filter = filter.interp_fir_filter_fff(1, self._taps())
-        self._fm_mod = analog.frequency_modulator_fc(self._fm_mod_sensitivity())
+        self._filter = interp_fir_filter_fff(1, self._taps())
+        self._fm_mod = frequency_modulator_fc(self._fm_mod_sensitivity())
 
         ##################################################
         # Connections

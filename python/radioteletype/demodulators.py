@@ -8,7 +8,15 @@ from radioteletype_swig import async_word_extractor_bb, baudot_decode_bb
 
 
 class rtty_demod_cb(gr.hier_block2):
-    def __init__(self, alpha=0.35, baud=45.45, decimation=1, mark_freq=2295, samp_rate=48000, space_freq=2125):
+    def __init__(
+        self,
+        alpha=0.35,
+        baud=45.45,
+        decimation=1,
+        mark_freq=2295,
+        samp_rate=48000,
+        space_freq=2125,
+    ):
         gr.hier_block2.__init__(
             self, "RTTY Demod",
             gr.io_signature(1, 1, gr.sizeof_gr_complex),
@@ -31,10 +39,19 @@ class rtty_demod_cb(gr.hier_block2):
         self._threshold = blocks.threshold_ff(0, 0, 0)
         self._subtract = blocks.sub_ff(1)
         self._float_to_char = blocks.float_to_char(1, 1)
-        self._space_tone_detector = tone_detector_cf(decimation, space_freq, samp_rate, baud, 0.35)
-        self._mark_tone_detector = tone_detector_cf(decimation, mark_freq, samp_rate, baud, 0.35)
+
+        self._space_tone_detector = tone_detector_cf(
+            decimation, space_freq, samp_rate, baud, 0.35
+        )
+
+        self._mark_tone_detector = tone_detector_cf(
+            decimation, mark_freq, samp_rate, baud, 0.35
+        )
+
         self._baudot_decode = baudot_decode_bb()
-        self._word_extractor = async_word_extractor_bb(5, samp_rate/decimation, baud)
+
+        self._word_extractor = async_word_extractor_bb(
+            5, samp_rate/decimation, baud)
 
         ##################################################
         # Connections
@@ -44,7 +61,12 @@ class rtty_demod_cb(gr.hier_block2):
         self.connect(self, self._mark_tone_detector, self._subtract)
         self.connect(self, self._space_tone_detector, (self._subtract, 1))
 
-        self.connect(self._subtract, self._threshold, self._float_to_char, self._word_extractor)
+        self.connect(
+            self._subtract,
+            self._threshold,
+            self._float_to_char,
+            self._word_extractor,
+        )
 
         self.connect(self._subtract, (self, 1))
         self.connect(self._mark_tone_detector, (self, 2))
@@ -93,10 +115,12 @@ class rtty_demod_cb(gr.hier_block2):
 class tone_detector_cf(gr.hier_block2):
     """Detector for a single tone of an FSK signal."""
     def __init__(self, decim, center_freq, sample_rate, baud_rate, alpha=0.35):
-        gr.hier_block2.__init__(self,
+        gr.hier_block2.__init__(
+            self,
             "tone_detector_cf",
             gr.io_signature(1, 1, gr.sizeof_gr_complex),
-            gr.io_signature(1, 1, gr.sizeof_float))
+            gr.io_signature(1, 1, gr.sizeof_float),
+        )
 
         self.center_freq = center_freq
         self.sample_rate = sample_rate
