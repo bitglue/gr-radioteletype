@@ -6,19 +6,51 @@
  |___/                                                      |___/|_|         
 
 
-A GNU Radio module for demodulating radioteletype, AKA RTTY.
+A GNU Radio module for demodulating radioteletype, AKA RTTY. And also PSK31.
 
-See the examples directory in particular. Be sure to run rtty_demod.py from the
-examples directory. Otherwise it will be unable to open ./rtty.wav.
+If running the examples, be sure to run from that directory. Some of them open
+WAV files for input with relative paths, expecting them to be in the current
+directory. You'll need to either start GRC from the examples directory, or
+generate (but not run) the blocks with GRC, and then run the generated program
+from a terminal or something.
 
-The module contains four blocks:
+Summary of Contents:
 
-rtty_demod: A hierarchical block putting all the blocks herein for a complete
-RTTY demodulator.
+radioteletype.demodulators.rtty_demod_db
 
-async_word_extractor: Recover words from an asynchronous bit stream. This might
-also find application with other asynchronous serial protocols such as RS-232.
+  A hierarchical omnibus block. RF in, ASCII out.
 
-tone_detector: The envelope detector for individual tones (mark and space).
+radioteletype.demodulators.async_word_extractor
 
-baudot_decode: Convert Baudot into ASCII.
+  Extract words from an asynchronous serial protocol. That is, something with
+  start and stop bits.
+
+radioteletype.demodulators.baudot_decode_bb
+
+  Decode Baudot code to ASCII.
+
+radioteletype.demodulators.tone_detector_cf
+
+  The detector used for individual FSK tones.
+
+radioteletype.filters.raised_cos
+
+  Generate FIR taps for a raised cosine filter.
+
+radioteletype.filters.extended_raised_cos
+
+  Generate FIR taps made of a sequence of raised cosine filters which
+  approaches a boxcar function while maintaining zero ISI. See
+  examples/recursive_filter.grc
+
+radioteletype.modulators.am_fsk_mod_bc
+
+  Generate FSK by switching the envelopes of two free-running oscillators.
+
+radioteletype.modulators.fm_fsk_mod_bc
+
+  Generate FSK by FM, optionally with some filtering of the modulating signal.
+
+radioteletype.modulators.baudot_encode_bb
+
+  Convert ASCII to Baudot code.

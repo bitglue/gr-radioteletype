@@ -8,6 +8,15 @@ from radioteletype_swig import async_word_extractor_bb, baudot_decode_bb
 
 
 class rtty_demod_cb(gr.hier_block2):
+    '''RF in, ASCII out.
+
+    This handles:
+        - filtering the input
+        - demodulating the bits
+        - finding the characters between the start and stop bits
+        - decoding Baudot to ASCII
+    '''
+
     def __init__(
         self,
         alpha=0.35,
