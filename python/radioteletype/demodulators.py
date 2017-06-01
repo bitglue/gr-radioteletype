@@ -4,7 +4,11 @@ from gnuradio import blocks
 from gnuradio import gr
 from gnuradio.filter import freq_xlating_fft_filter_ccc
 from radioteletype.filters import extended_raised_cos
-from radioteletype_swig import async_word_extractor_bb, baudot_decode_bb
+from radioteletype_swig import (
+    async_word_extractor_bb,
+    baudot_decode_bb,
+    varicode_decode_bb,
+)
 
 
 class rtty_demod_cb(gr.hier_block2):
@@ -183,4 +187,5 @@ __all__ = [
     'baudot_decode_bb',
     'rtty_demod_cb',
     'tone_detector_cf',
+    'varicode_decode_bb',
 ]

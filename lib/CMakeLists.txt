@@ -29,6 +29,7 @@ list(APPEND radioteletype_sources
     async_word_extractor_bb_impl.cc
     baudot_decode_bb_impl.cc
     baudot_encode_bb_impl.cc
+    varicode_decode_bb_impl.cc
 )
 
 set(radioteletype_sources "${radioteletype_sources}" PARENT_SCOPE)

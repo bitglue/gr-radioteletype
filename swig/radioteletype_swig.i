@@ -11,6 +11,7 @@
 #include "radioteletype/async_word_extractor_bb.h"
 #include "radioteletype/baudot_decode_bb.h"
 #include "radioteletype/baudot_encode_bb.h"
+#include "radioteletype/varicode_decode_bb.h"
 %}
 
 
@@ -20,3 +21,5 @@ GR_SWIG_BLOCK_MAGIC2(radioteletype, async_word_extractor_bb);
 GR_SWIG_BLOCK_MAGIC2(radioteletype, baudot_decode_bb);
 %include "radioteletype/baudot_encode_bb.h"
 GR_SWIG_BLOCK_MAGIC2(radioteletype, baudot_encode_bb);
+%include "radioteletype/varicode_decode_bb.h"
+GR_SWIG_BLOCK_MAGIC2(radioteletype, varicode_decode_bb);

@@ -29,6 +29,10 @@ radioteletype.demodulators.baudot_decode_bb
 
   Decode Baudot code to ASCII.
 
+radioteletype.demodulators.varicode_decode_bb
+
+  Decode Varicode to ASCII.
+
 radioteletype.demodulators.tone_detector_cf
 
   The detector used for individual FSK tones.

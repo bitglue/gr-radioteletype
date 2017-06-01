@@ -24,5 +24,6 @@ install(FILES
     radioteletype_baudot_decode_bb.xml
     radioteletype_rtty_demod_cb.xml
     radioteletype_tone_detector_cf.xml
+    radioteletype_varicode_decode_bb.xml
     radioteletype_baudot_encode_bb.xml DESTINATION share/gnuradio/grc/blocks
 )
