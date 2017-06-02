@@ -19,6 +19,7 @@
 
 install(FILES
     radioteletype_psk31_demodulator_cbc.xml
+    radioteletype_psk31_modulator_bc.xml
     radioteletype_am_fsk_mod_bc.xml
     radioteletype_fm_fsk_mod_bc.xml
     radioteletype_async_word_extractor_bb.xml

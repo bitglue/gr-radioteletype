@@ -48,3 +48,4 @@ GR_ADD_TEST(qa_baudot_decode_bb ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}
 GR_ADD_TEST(qa_tone_detector_cf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tone_detector_cf.py)
 GR_ADD_TEST(qa_varicode_decode_bb ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_varicode_decode_bb.py)
 GR_ADD_TEST(qa_psk31_demodulator_cbc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_psk31_demodulator_cbc.py)
+GR_ADD_TEST(qa_psk31_modulator_bc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_psk31_modulator_bc.py)

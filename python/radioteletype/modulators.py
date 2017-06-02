@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
-##################################################
-# GNU Radio Python Flow Graph
-# Title: Am Fsk Mod Bc
-# Generated: Wed May 31 05:55:33 2017
-##################################################
 
-from gnuradio import blocks, gr
+from gnuradio import blocks, gr, digital
 from gnuradio.filter import interp_fir_filter_fcc, interp_fir_filter_fff
 from gnuradio.analog import frequency_modulator_fc
-from math import pi
+from math import pi, sin
 
 from radioteletype_swig import baudot_encode_bb
 
@@ -217,8 +212,75 @@ class fm_fsk_mod_bc(gr.hier_block2):
         self._reset()
 
 
+class psk31_modulator_bc(gr.hier_block2):
+    def __init__(self, samp_per_sym=8):
+        gr.hier_block2.__init__(
+            self, "PSK31 Modulator",
+            gr.io_signature(1, 1, gr.sizeof_char*1),
+            gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
+        )
+
+        ##################################################
+        # Parameters
+        ##################################################
+        self.samp_per_sym = samp_per_sym
+
+        ##################################################
+        # Variables
+        ##################################################
+
+        ##################################################
+        # Blocks
+        ##################################################
+        self._envelope_filter = interp_fir_filter_fff(1, self._envelope_taps())
+        self._envelope_filter.declare_sample_delay(0)
+        self._repeat = blocks.repeat(gr.sizeof_float*1, samp_per_sym)
+
+        ##################################################
+        # Connections
+        ##################################################
+        self.connect(
+            self,
+
+            # PSK31 defines 0 as a phase change, opposite the usual
+            # differential encoding which is: out = (next - prev) % 2
+            blocks.not_bb(),
+            blocks.and_const_bb(1),
+
+            digital.diff_encoder_bb(2),
+            blocks.char_to_float(1, 1),
+            blocks.add_const_vff((-0.5, )),
+            blocks.multiply_const_vff((2, )),
+            self._repeat,
+            self._envelope_filter,
+            blocks.float_to_complex(1),
+            self,
+        )
+
+    def _envelope_taps(self):
+        sps = self.samp_per_sym
+        raised_cos = raised_cos = [
+            sin(j/float(sps+1)*pi)
+            for j in range(1, sps+1)
+        ]
+        # normalize so the peak is at 1
+        return [i/sum(raised_cos) for i in raised_cos]
+
+    def _reset(self):
+        self._envelope_filter.set_taps(self._envelope_taps())
+        self._repeat.set_interpolation(self.samp_per_sym)
+
+    def get_samp_per_sym(self):
+        return self.samp_per_sym
+
+    def set_samp_per_sym(self, samp_per_sym):
+        self.samp_per_sym = samp_per_sym
+        self._reset()
+
+
 __all__ = [
     'am_fsk_mod_bc',
-    'fm_fsk_mod_bc',
     'baudot_encode_bb',
+    'fm_fsk_mod_bc',
+    'psk31_modulator_bc',
 ]
