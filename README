@@ -37,6 +37,11 @@ radioteletype.demodulators.tone_detector_cf
 
   The detector used for individual FSK tones.
 
+radioteletype.demodulators.psk31_demodulator_cbc
+
+  Modulated PSK31 in, bits out. Send output to varicode_decode_bb for ASCII
+  output.
+
 radioteletype.filters.raised_cos
 
   Generate FIR taps for a raised cosine filter.

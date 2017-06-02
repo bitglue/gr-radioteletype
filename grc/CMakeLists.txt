@@ -18,6 +18,7 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
+    radioteletype_psk31_demodulator_cbc.xml
     radioteletype_am_fsk_mod_bc.xml
     radioteletype_fm_fsk_mod_bc.xml
     radioteletype_async_word_extractor_bb.xml

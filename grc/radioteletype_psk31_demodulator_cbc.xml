@@ -1,0 +1,32 @@
+<block>
+  <name>PSK31 Demodulator</name>
+  <key>psk31_demodulator</key>
+  <category>[Radioteletype]</category>
+  <import>from radioteletype.demodulators import psk31_demodulator_cbc</import>
+  <make>psk31_demodulator_cbc(
+    samp_per_sym=$samp_per_sym,
+)</make>
+  <callback>set_samp_per_sym($samp_per_sym)</callback>
+  <param>
+    <name>Samples per Symbol</name>
+    <key>samp_per_sym</key>
+    <value>8</value>
+    <type>raw</type>
+  </param>
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+    <vlen>1</vlen>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>byte</type>
+    <vlen>1</vlen>
+  </source>
+  <source>
+    <name>out</name>
+    <type>complex</type>
+    <vlen>1</vlen>
+    <optional>1</optional>
+  </source>
+</block>
