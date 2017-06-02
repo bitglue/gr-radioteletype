@@ -5,7 +5,7 @@ from gnuradio.filter import interp_fir_filter_fcc, interp_fir_filter_fff
 from gnuradio.analog import frequency_modulator_fc
 from math import pi, sin
 
-from radioteletype_swig import baudot_encode_bb
+from radioteletype_swig import baudot_encode_bb, varicode_encode_bb
 
 
 class am_fsk_mod_bc(gr.hier_block2):
@@ -283,4 +283,5 @@ __all__ = [
     'baudot_encode_bb',
     'fm_fsk_mod_bc',
     'psk31_modulator_bc',
+    'varicode_encode_bb',
 ]

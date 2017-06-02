@@ -64,6 +64,10 @@ radioteletype.modulators.baudot_encode_bb
 
   Convert ASCII to Baudot code.
 
+radioteletype.modulators.varicode_encode_bb
+
+  Convert ASCII to Varicode.
+
 radioteletype.modulators.psk31_modulator_bc
 
   Bits in, modulated PSK31 out.
