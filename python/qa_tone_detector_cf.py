@@ -41,7 +41,7 @@ class qa_async_word_extractor_bb(gr_unittest.TestCase):
         self.tb.connect(src, tone_detector)
         self.tb.connect(tone_detector, dst)
         self.tb.run()
-        result = dst.data()
+        dst.data()
 
 
 def bits_in_word(word, length):
@@ -77,4 +77,6 @@ def generate(samples_per_bit, bits_per_word, words, stop_bits=1.5):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_async_word_extractor_bb, "qa_async_word_extractor_bb.xml")
+    gr_unittest.run(
+        qa_async_word_extractor_bb,
+        "qa_async_word_extractor_bb.xml")

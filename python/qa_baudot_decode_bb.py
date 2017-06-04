@@ -1,23 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# 
+#
 # Copyright 2017 Phil Frost.
-# 
+#
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3, or (at your option)
 # any later version.
-# 
+#
 # This software is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this software; see the file COPYING.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
-# 
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
@@ -103,11 +102,12 @@ figure_map = {
 inverse_letter_map = {v: k for k, v in letter_map.items()}
 inverse_figure_map = {v: k for k, v in figure_map.items()}
 
-class qa_baudot_decode_bb (gr_unittest.TestCase):
-    def setUp (self):
-        self.tb = gr.top_block ()
 
-    def tearDown (self):
+class qa_baudot_decode_bb(gr_unittest.TestCase):
+    def setUp(self):
+        self.tb = gr.top_block()
+
+    def tearDown(self):
         self.tb = None
 
     def _test(self, src_data, block):
@@ -121,7 +121,9 @@ class qa_baudot_decode_bb (gr_unittest.TestCase):
     _baudot.append(0x1b)
     _baudot.extend(map(inverse_figure_map.__getitem__, '0123456789'))
     _baudot.append(0x1f)
-    _baudot.extend(map(inverse_letter_map.__getitem__, ' JUMPS OVER THE LAZY DOG\r\n'))
+    _baudot.extend(map(
+        inverse_letter_map.__getitem__,
+        ' JUMPS OVER THE LAZY DOG\r\n'))
     _ascii = 'THE QUICK BROWN FOX 0123456789 JUMPS OVER THE LAZY DOG\r\n'
 
     def test_decode(self):
@@ -141,7 +143,5 @@ class qa_baudot_decode_bb (gr_unittest.TestCase):
         self.assertEqual(list(result), [])
 
 
-
 if __name__ == '__main__':
     gr_unittest.run(qa_baudot_decode_bb, "qa_baudot_decode_bb.xml")
-    gr_unittest.run(qa_baudot_encode_bb, "qa_baudot_encode_bb.xml")

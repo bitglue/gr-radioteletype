@@ -1,23 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# 
+#
 # Copyright 2017 Phil Frost
-# 
+#
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3, or (at your option)
 # any later version.
-# 
+#
 # This software is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this software; see the file COPYING.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
-# 
+#
 
 from __future__ import division
 
@@ -35,9 +35,9 @@ class qa_async_word_extractor_bb(gr_unittest.TestCase):
 
     def test_one_word(self):
         src_data = [1] + list(self.multiply_bits([
-            0,  # start
+            0,      # start
             0, 0, 1, 1, 0, 1, 0, 1,
-            1, 1, # stop
+            1, 1,   # stop
         ], 8))
         expected = 0b10101100
 
@@ -47,7 +47,10 @@ class qa_async_word_extractor_bb(gr_unittest.TestCase):
             words=[expected],))
 
         src = blocks.vector_source_b(src_data)
-        extractor = async_word_extractor_bb(bits_per_word=8, sample_rate=8, bit_rate=1)
+        extractor = async_word_extractor_bb(
+            bits_per_word=8,
+            sample_rate=8,
+            bit_rate=1)
         dst = blocks.vector_sink_b()
         self.tb.connect(src, extractor)
         self.tb.connect(extractor, dst)
@@ -61,14 +64,17 @@ class qa_async_word_extractor_bb(gr_unittest.TestCase):
         self.assertEqual(bits, [0, 1, 0, 0, 1, 1])
 
     def test_generate(self):
-        bits = list(generate(samples_per_bit=2, bits_per_word=3, words=[0b101]))
+        bits = list(generate(
+            samples_per_bit=2,
+            bits_per_word=3,
+            words=[0b101]))
         self.assertEqual(bits, [
             # start bit
-            0,0,
+            0, 0,
             # data (1, 0, 1)
-            1,1, 0,0, 1,1,
+            1, 1, 0, 0, 1, 1,
             # 1.5 stop bits
-            1,1,1,
+            1, 1, 1,
         ])
 
     @staticmethod
@@ -111,4 +117,6 @@ def generate(samples_per_bit, bits_per_word, words, stop_bits=1.5):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_async_word_extractor_bb, "qa_async_word_extractor_bb.xml")
+    gr_unittest.run(
+        qa_async_word_extractor_bb,
+        "qa_async_word_extractor_bb.xml")

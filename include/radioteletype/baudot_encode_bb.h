@@ -29,7 +29,7 @@ namespace gr {
   namespace radioteletype {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Decode Baudot code to ASCII
      * \ingroup radioteletype
      *
      */
