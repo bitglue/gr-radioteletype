@@ -23,7 +23,7 @@ from __future__ import division
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
-import radioteletype_swig as radioteletype
+from radioteletype.demodulators import async_word_extractor_bb
 
 
 class qa_async_word_extractor_bb(gr_unittest.TestCase):
@@ -47,7 +47,7 @@ class qa_async_word_extractor_bb(gr_unittest.TestCase):
             words=[expected],))
 
         src = blocks.vector_source_b(src_data)
-        extractor = radioteletype.async_word_extractor_bb(bits_per_word=8, sample_rate=8, bit_rate=1)
+        extractor = async_word_extractor_bb(bits_per_word=8, sample_rate=8, bit_rate=1)
         dst = blocks.vector_sink_b()
         self.tb.connect(src, extractor)
         self.tb.connect(extractor, dst)

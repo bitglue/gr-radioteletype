@@ -21,7 +21,8 @@
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
-import radioteletype_swig as radioteletype
+from radioteletype.modulators import baudot_encode_bb
+from radioteletype.demodulators import baudot_decode_bb
 
 letter_map = {
     0x00: '\x00',
@@ -124,18 +125,18 @@ class qa_baudot_decode_bb (gr_unittest.TestCase):
     _ascii = 'THE QUICK BROWN FOX 0123456789 JUMPS OVER THE LAZY DOG\r\n'
 
     def test_decode(self):
-        decoder = radioteletype.baudot_decode_bb()
+        decoder = baudot_decode_bb()
         result = self._test(self._baudot, decoder)
         self.assertEqual(''.join(map(chr, result)), self._ascii)
 
     def test_encode(self):
-        encoder = radioteletype.baudot_encode_bb()
+        encoder = baudot_encode_bb()
         result = self._test(map(ord, self._ascii), encoder)
         self.assertEqual(list(result), self._baudot)
 
     def test_encode_invalid_chars(self):
         src_data = range(0x7B, 0x100)
-        encoder = radioteletype.baudot_encode_bb()
+        encoder = baudot_encode_bb()
         result = self._test(src_data, encoder)
         self.assertEqual(list(result), [])
 
