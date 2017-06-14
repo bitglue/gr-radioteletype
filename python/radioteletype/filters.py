@@ -73,3 +73,39 @@ def extended_raised_cos(
     taps = [_extended_raised_cos(i, T, alpha, order)
             for i in range(-ntaps//2+1, ntaps//2+1)]
     return _normalize_gain(taps, gain)
+
+
+def raised_cos_impulse(length):
+    '''Return a raised cosine impulse of given length.
+
+    Not to be confused with a raised cosine filter, which has a raised cosine
+    frequency response.
+
+    The PSK31 pulse shape is one of these of twice the symbol length.
+    '''
+    return [(cos(j * 2*pi/length) - 1)/-2 for j in range(length)]
+
+
+# These taps are from the PSKCore DLL, originally licensed under the LGPL. They
+# require 16 samples per symbol. ISI is low, with the amplitude of adjacent
+# pulses being 0.0659 for a pulse with peak amplitude normalized to 1. It has a
+# quite steep and narrow frequency response. The penalty to SNR is 0.2547 dB
+# compared to a matched filter.
+#
+# http://www.moetronix.com/ae4jy/pskcoredll.htm
+
+pskcore_filter_taps = (
+    4.3453566e-005, -0.00049122414, -0.00078771292, -0.0013507826,
+    -0.0021287814, -0.003133466, -0.004366817, -0.0058112187, -0.0074249976,
+    -0.0091398882, -0.010860157, -0.012464086, -0.013807772, -0.014731191,
+    -0.015067057, -0.014650894, -0.013333425, -0.01099166, -0.0075431246,
+    -0.0029527849, 0.0027546292, 0.0094932775, 0.017113308, 0.025403511,
+    0.034099681, 0.042895839, 0.051458575, 0.059444853, 0.066521003,
+    0.072381617, 0.076767694, 0.079481619, 0.080420311, 0.079481619,
+    0.076767694, 0.072381617, 0.066521003, 0.059444853, 0.051458575,
+    0.042895839, 0.034099681, 0.025403511, 0.017113308, 0.0094932775,
+    0.0027546292, -0.0029527849, -0.0075431246, -0.01099166, -0.013333425,
+    -0.014650894, -0.015067057, -0.014731191, -0.013807772, -0.012464086,
+    -0.010860157, -0.0091398882, -0.0074249976, -0.0058112187, -0.004366817,
+    -0.003133466, -0.0021287814, -0.0013507826, -0.00078771292, -0.00049122414,
+    4.3453566e-005)
