@@ -1,7 +1,7 @@
 <block>
   <name>Varicode Encoder</name>
   <key>radioteletype_varicode_encode_bb</key>
-  <category>[Raidoteletype]</category>
+  <category>[Radioteletype]</category>
   <import>from radioteletype.modulators import varicode_encode_bb</import>
   <make>varicode_encode_bb()</make>
   <sink>
