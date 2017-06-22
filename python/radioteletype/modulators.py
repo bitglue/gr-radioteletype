@@ -213,7 +213,7 @@ class fm_fsk_mod_bc(gr.hier_block2):
 
 
 class psk31_modulator_bc(gr.hier_block2):
-    def __init__(self, samp_per_sym=8):
+    def __init__(self, samp_per_sym=4):
         gr.hier_block2.__init__(
             self, "PSK31 Modulator",
             gr.io_signature(1, 1, gr.sizeof_char*1),

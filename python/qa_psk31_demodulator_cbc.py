@@ -2,7 +2,7 @@ from __future__ import division
 
 from gnuradio import gr, gr_unittest
 
-from radioteletype.demodulators import psk31_demodulator_cbc
+from radioteletype import demodulators
 
 
 class qa_psk31_demodulator_cbc(gr_unittest.TestCase):
@@ -17,7 +17,8 @@ class qa_psk31_demodulator_cbc(gr_unittest.TestCase):
 
         After modulator is implemented there can be a loopback test.
         '''
-        psk31_demodulator_cbc()
+        demodulators.psk31_coherent_demodulator_cc()
+        demodulators.psk31_constellation_decoder_cb()
 
 
 if __name__ == '__main__':

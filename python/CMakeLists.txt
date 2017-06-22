@@ -50,3 +50,4 @@ GR_ADD_TEST(qa_varicode_decode_bb ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DI
 GR_ADD_TEST(qa_varicode_encode_bb ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_varicode_encode_bb.py)
 GR_ADD_TEST(qa_psk31_demodulator_cbc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_psk31_demodulator_cbc.py)
 GR_ADD_TEST(qa_psk31_modulator_bc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_psk31_modulator_bc.py)
+GR_ADD_TEST(qa_rms_agc_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_rms_agc_cc.py)

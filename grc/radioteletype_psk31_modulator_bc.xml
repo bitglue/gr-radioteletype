@@ -10,7 +10,7 @@
   <param>
     <name>Samples per Symbol</name>
     <key>samp_per_sym</key>
-    <value>8</value>
+    <value>samp_per_sym</value>
     <type>raw</type>
   </param>
   <sink>

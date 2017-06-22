@@ -2,8 +2,7 @@ from __future__ import division
 
 from gnuradio import gr, gr_unittest, blocks
 
-from radioteletype.modulators import psk31_modulator_bc
-from radioteletype.demodulators import psk31_demodulator_cbc
+from radioteletype import modulators, demodulators
 
 
 class qa_psk31_modulator_bc(gr_unittest.TestCase):
@@ -13,41 +12,31 @@ class qa_psk31_modulator_bc(gr_unittest.TestCase):
     def tearDown(self):
         self.tb = None
 
-    @staticmethod
-    def _stringify_bits(bits):
-        for bit in bits:
-            assert 0 <= bit <= 1
-        return ''.join(str(i) for i in bits)
-
     def test_loopback(self):
-        test_sequence = [1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1]
+        test_string = "the quick brown fox jumps over the lazy dog"
+        test_sequence = map(ord, test_string)
 
-        modulator = psk31_modulator_bc()
-        demodulator = psk31_demodulator_cbc()
 
-        source = blocks.vector_source_b(test_sequence*3)
+        source = blocks.vector_source_b([0]*16 + map(ord, test_string)*2)
         sink = blocks.vector_sink_b()
 
         self.tb.connect(
             source,
-            modulator,
-            demodulator,
+            modulators.varicode_encode_bb(),
+            modulators.psk31_modulator_bc(),
+            demodulators.psk31_coherent_demodulator_cc(),
+            demodulators.psk31_constellation_decoder_cb(
+                varicode_decode=True,
+                differential_decode=True,
+            ),
             sink,
         )
 
         self.tb.run()
 
-        string_data_out = self._stringify_bits(sink.data())
-        string_test_sequence = self._stringify_bits(test_sequence)
+        string_data_out = ''.join(chr(c) for c in sink.data())
 
-        # there might be extra bits at the start or the end, so shift the two
-        # streams until we find where the sync
-        for _ in xrange(len(test_sequence)):
-            if string_data_out.endswith(string_test_sequence):
-                break
-            string_data_out = string_data_out[:-1]
-        else:
-            self.fail('test sequence was not found anywhere in output')
+        self.assertTrue(test_string in string_data_out, "test string not in output %r" % (string_data_out,))
 
 
 if __name__ == '__main__':
