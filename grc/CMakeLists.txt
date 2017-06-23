@@ -20,6 +20,7 @@
 install(FILES
     radioteletype_rms_agc_cc.xml
     radioteletype_psk31_coherent_demodulator_cc.xml
+    radioteletype_psk31_incoherent_demodulator_cc.xml
     radioteletype_psk31_constellation_decoder_cb.xml
     radioteletype_psk31_modulator_bc.xml
     radioteletype_am_fsk_mod_bc.xml

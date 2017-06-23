@@ -12,7 +12,7 @@ class qa_psk31_modulator_bc(gr_unittest.TestCase):
     def tearDown(self):
         self.tb = None
 
-    def test_loopback(self):
+    def _loopback_test(self, modulator, demodulator, decoder):
         test_string = "the quick brown fox jumps over the lazy dog"
 
         source = blocks.vector_source_b([0]*32 + map(ord, test_string)*2)
@@ -21,12 +21,9 @@ class qa_psk31_modulator_bc(gr_unittest.TestCase):
         self.tb.connect(
             source,
             modulators.varicode_encode_bb(),
-            modulators.psk31_modulator_bc(),
-            demodulators.psk31_coherent_demodulator_cc(),
-            demodulators.psk31_constellation_decoder_cb(
-                varicode_decode=True,
-                differential_decode=True,
-            ),
+            modulator,
+            demodulator,
+            decoder,
             sink,
         )
 
@@ -37,6 +34,26 @@ class qa_psk31_modulator_bc(gr_unittest.TestCase):
         self.assertTrue(
             test_string in string_data_out,
             "test string not in output %r" % (string_data_out,),
+        )
+
+    def test_coherent_loopback(self):
+        self._loopback_test(
+            modulators.psk31_modulator_bc(),
+            demodulators.psk31_coherent_demodulator_cc(),
+            demodulators.psk31_constellation_decoder_cb(
+                varicode_decode=True,
+                differential_decode=True,
+            ),
+        )
+
+    def test_incoherent_loopback(self):
+        self._loopback_test(
+            modulators.psk31_modulator_bc(),
+            demodulators.psk31_incoherent_demodulator_cc(),
+            demodulators.psk31_constellation_decoder_cb(
+                varicode_decode=True,
+                differential_decode=False,
+            ),
         )
 
 

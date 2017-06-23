@@ -233,7 +233,70 @@ class tone_detector_cf(gr.hier_block2):
         self._mag.declare_sample_delay(samp_delay)
 
 
-class psk31_coherent_demodulator_cc(gr.hier_block2):
+class _psk31_sync_base(gr.hier_block2):
+    def __init__(
+        self,
+        samp_per_sym=4,
+        sync_bandwidth=.6,
+        agc_time_const=8,
+        sync_phases=32,
+    ):
+        self.agc_time_const = agc_time_const
+        self.samp_per_sym = samp_per_sym
+        self.sync_bandwidth = sync_bandwidth
+        self.sync_phases = sync_phases
+
+        self._clock_sync = digital.pfb_clock_sync_ccf(
+            sps=samp_per_sym,
+            loop_bw=sync_bandwidth,
+            taps=self._clock_sync_taps(self.samp_per_sym, self.sync_phases),
+            filter_size=sync_phases,
+            init_phase=16,
+            max_rate_deviation=1.5,
+            osps=1,
+        )
+
+        self._pre_sync_agc = rms_agc_cc(self._alpha() / samp_per_sym)
+        self._post_sync_agc = rms_agc_cc(self._alpha())
+
+        self.connect(
+            self,
+            self._pre_sync_agc,
+            self._clock_sync,
+            self._post_sync_agc,
+        )
+
+    def _reset(self):
+        self._pre_sync_agc.set_alpha(self._alpha() / self.samp_per_sym)
+        self._post_sync_agc.set_alpha(self._alpha())
+
+        self._clock_sync.set_loop_bandwidth(self.sync_bandwidth)
+        taps = self._clock_sync_taps(self.samp_per_sym, self.sync_phases)
+        self._clock_sync.update_taps(taps)
+
+    def get_agc_time_const(self):
+        return self.agc_time_const
+
+    def set_agc_time_const(self, agc_time_const):
+        self.agc_time_const = agc_time_const
+        self._reset()
+
+    def get_sync_bandwidth(self):
+        return self.sync_bandwidth
+
+    def set_sync_bandwidth(self, sync_bandwidth):
+        self.sync_bandwidth = sync_bandwidth
+        self._reset()
+
+    def _alpha(self):
+        return 1.0-exp(-1.0/self.agc_time_const)
+
+    @staticmethod
+    def _clock_sync_taps(samp_per_sym, phases):
+        return filters.psk31_compromise(samp_per_sym, phases)
+
+
+class psk31_coherent_demodulator_cc(_psk31_sync_base):
     '''Demodulate (but don't decode) PSK31.
 
     The output is sampled at 1 sample per symbol. If the output is going to the
@@ -254,32 +317,20 @@ class psk31_coherent_demodulator_cc(gr.hier_block2):
             gr.io_signature(1, 1, gr.sizeof_gr_complex),
         )
 
-        self.agc_time_const = agc_time_const
-        self.costas_bandwidth = costas_bandwidth
-        self.samp_per_sym = samp_per_sym
-        self.sync_bandwidth = sync_bandwidth
-        self.sync_phases = sync_phases
-
-        self._clock_sync = digital.pfb_clock_sync_ccf(
-            sps=samp_per_sym,
-            loop_bw=sync_bandwidth,
-            taps=self._clock_sync_taps(self.samp_per_sym, self.sync_phases),
-            filter_size=sync_phases,
-            init_phase=16,
-            max_rate_deviation=1.5,
-            osps=1,
+        _psk31_sync_base.__init__(
+            self,
+            samp_per_sym,
+            sync_bandwidth,
+            agc_time_const,
+            sync_phases,
         )
 
+        self.costas_bandwidth = costas_bandwidth
         self._costas_loop = digital.costas_loop_cc(costas_bandwidth, 2, True)
-        self._pre_sync_agc = rms_agc_cc(self._alpha() / samp_per_sym)
-        self._post_sync_agc = rms_agc_cc(self._alpha())
 
         self._reset()
 
         self.connect(
-            self,
-            self._pre_sync_agc,
-            self._clock_sync,
             self._post_sync_agc,
             self._costas_loop,
             self,
@@ -287,20 +338,7 @@ class psk31_coherent_demodulator_cc(gr.hier_block2):
 
     def _reset(self):
         self._costas_loop.set_loop_bandwidth(self.costas_bandwidth)
-
-        self._pre_sync_agc.set_alpha(self._alpha() / self.samp_per_sym)
-        self._post_sync_agc.set_alpha(self._alpha())
-
-        self._clock_sync.set_loop_bandwidth(self.sync_bandwidth)
-        taps = self._clock_sync_taps(self.samp_per_sym, self.sync_phases)
-        self._clock_sync.update_taps(taps)
-
-    def get_agc_time_const(self):
-        return self.agc_time_const
-
-    def set_agc_time_const(self, agc_time_const):
-        self.agc_time_const = agc_time_const
-        self._reset()
+        _psk31_sync_base._reset(self)
 
     def get_costas_bandwidth(self):
         return self.costas_bandwidth
@@ -309,19 +347,45 @@ class psk31_coherent_demodulator_cc(gr.hier_block2):
         self.costas_bandwidth = costas_bandwidth
         self._reset()
 
-    def get_sync_bandwidth(self):
-        return self.sync_bandwidth
 
-    def set_sync_bandwidth(self, sync_bandwidth):
-        self.sync_bandwidth = sync_bandwidth
+class psk31_incoherent_demodulator_cc(_psk31_sync_base):
+    def __init__(
+        self,
+        samp_per_sym=4,
+        sync_bandwidth=.6,
+        costas_bandwidth=0.15,
+        agc_time_const=8,
+        sync_phases=32,
+    ):
+        gr.hier_block2.__init__(
+            self, "PSK31 Incoherent Demodulator",
+            gr.io_signature(1, 1, gr.sizeof_gr_complex),
+            gr.io_signature(1, 1, gr.sizeof_gr_complex),
+        )
+
+        _psk31_sync_base.__init__(
+            self,
+            samp_per_sym,
+            sync_bandwidth,
+            agc_time_const,
+            sync_phases,
+        )
+
+        self._multiply = blocks.multiply_conjugate_cc(1)
+
         self._reset()
 
-    def _alpha(self):
-        return 1.0-exp(-1.0/self.agc_time_const)
+        self.connect(
+            self._post_sync_agc,
+            (self._multiply, 0),
+            self,
+        )
 
-    @staticmethod
-    def _clock_sync_taps(samp_per_sym, phases):
-        return filters.psk31_compromise(samp_per_sym, phases)
+        self.connect(
+            self._post_sync_agc,
+            blocks.delay(gr.sizeof_gr_complex*1, 1),
+            (self._multiply, 1),
+        )
 
 
 class psk31_constellation_decoder_cb(gr.hier_block2):
