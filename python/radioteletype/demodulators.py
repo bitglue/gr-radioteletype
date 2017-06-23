@@ -4,8 +4,8 @@ from math import exp
 
 from gnuradio import blocks, digital
 from gnuradio import gr
-from gnuradio.filter import freq_xlating_fft_filter_ccc, firdes
-from radioteletype.filters import extended_raised_cos
+from gnuradio.filter import freq_xlating_fft_filter_ccc
+from radioteletype import filters
 from radioteletype_swig import (
     async_word_extractor_bb,
     baudot_decode_bb,
@@ -202,7 +202,7 @@ class tone_detector_cf(gr.hier_block2):
 
     def _taps(self):
         samples_per_sym = self.sample_rate / self.baud_rate
-        taps = extended_raised_cos(
+        taps = filters.extended_raised_cos(
             gain=1.0,
             sampling_freq=self.sample_rate,
             symbol_rate=self.baud_rate,
@@ -321,61 +321,7 @@ class psk31_coherent_demodulator_cc(gr.hier_block2):
 
     @staticmethod
     def _clock_sync_taps(samp_per_sym, phases):
-        '''Return taps for the channel filter, interpolated for clock sync.
-
-        PSK31 transmits symbols with a raised cosine pulse shape. Note this
-        isn't a raised-cosine filter: it's a raised cosine impulse.
-
-        While more reasonable PSK transmissions use (almost always) a
-        root-raised-cosine (that's a raised cosine in the frequency domain)
-        filter so the matched filter is zero-ISI, PSK31's transmit filter
-        selection makes matched filtering in the receiver without severe ISI
-        impossible.
-
-        It also has an infinitely wide frequency response, no matter how
-        ideally the filter is realized. For the typical case of many PSK31
-        signals all crammed into one 3kHz channel, this is unfortunate.
-
-        One possible solution to this in Viterbi detection, which is something
-        being investigated. Alternately, one can make a compromise filter which
-        attempts to maximize:
-
-        - capturing the maximum transmitted energy
-        - minimizing ISI
-        - a narrow passband to reject adjacent interfering signals
-
-        This filter was developed using the highly advanced method of manually
-        twiddling the cutoff and transition parameters until it looked good. A
-        Hann windowed sinc filter seems to perform especially well, probably on
-        account of the Hann function being a raised cosine. I haven't done the
-        math to determine exactly why this is true, though that may yield
-        additional insight into the optimal parameters.
-
-        The captured signal energy is 0.23 dB below the matched filter case. I
-        haven't carefully measured the ISI but it seems to be on par or maybe a
-        little better than the filter used in the PSKCore DLL. The ISI is
-        somewhat ameliorated by the equalizer.
-        '''
-        return firdes.low_pass(
-            # Polyphase clock sync splits these taps into `phases` phases,
-            # so the gain must be `phases` for each to have unity gain.
-            gain=phases,
-
-            # This block doesn't need to know sampling or symbol rates -- it
-            # only needs to know how many samples are in a signal. If it helps,
-            # think of setting sampling_freq=samp_per_sym as normalizing
-            # everything to a 1 Hz sample rate, and a 1 Hz symbol rate.
-            #
-            # And then multiply that by `phases` to generate the multiple
-            # phases for clock sync.
-            sampling_freq=samp_per_sym * phases,
-
-            # Cutoff frequency = transition width = symbol rate
-            cutoff_freq=0.68144,
-            transition_width=0.36224,
-
-            window=firdes.WIN_HANN,
-        )
+        return filters.psk31_compromise(samp_per_sym, phases)
 
 
 class psk31_constellation_decoder_cb(gr.hier_block2):

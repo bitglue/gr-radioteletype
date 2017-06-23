@@ -82,96 +82,6 @@
     </param>
   </block>
   <block>
-    <key>variable</key>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(260, 892)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>decim_taps</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>[1.0/samp_per_sym] * samp_per_sym</value>
-    </param>
-  </block>
-  <block>
-    <key>variable_qtgui_range</key>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>12</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(808, 874)</value>
-    </param>
-    <param>
-      <key>gui_hint</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>delay</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value>Delay</value>
-    </param>
-    <param>
-      <key>min_len</key>
-      <value>200</value>
-    </param>
-    <param>
-      <key>orient</key>
-      <value>Qt.Horizontal</value>
-    </param>
-    <param>
-      <key>start</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>step</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>stop</key>
-      <value>20</value>
-    </param>
-    <param>
-      <key>rangeType</key>
-      <value>float</value>
-    </param>
-    <param>
-      <key>widget</key>
-      <value>counter_slider</value>
-    </param>
-  </block>
-  <block>
     <key>variable_qtgui_range</key>
     <param>
       <key>comment</key>
@@ -187,7 +97,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(444, 876)</value>
+      <value>(4, 386)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -203,7 +113,7 @@
     </param>
     <param>
       <key>label</key>
-      <value></value>
+      <value>Doppler</value>
     </param>
     <param>
       <key>min_len</key>
@@ -250,7 +160,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(556, 874)</value>
+      <value>(116, 382)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -313,7 +223,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(696, 874)</value>
+      <value>(256, 382)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -411,7 +321,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>250</value>
+      <value>125</value>
     </param>
   </block>
   <block>
@@ -453,7 +363,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(512, 16)</value>
+      <value>(632, 20)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -496,7 +406,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(960, 510)</value>
+      <value>(972, 518)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -802,7 +712,7 @@
     <key>psk31_coherent_demodulator</key>
     <param>
       <key>agc_time_const</key>
-      <value>8.0</value>
+      <value>8</value>
     </param>
     <param>
       <key>alias</key>
@@ -810,7 +720,7 @@
     </param>
     <param>
       <key>sync_bandwidth</key>
-      <value>0.6</value>
+      <value>0.06</value>
     </param>
     <param>
       <key>sync_phases</key>
@@ -834,7 +744,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(452, 496)</value>
+      <value>(448, 498)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -881,7 +791,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(708, 516)</value>
+      <value>(708, 524)</value>
     </param>
     <param>
       <key>_rotation</key>

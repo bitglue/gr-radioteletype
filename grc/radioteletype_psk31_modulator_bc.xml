@@ -6,7 +6,6 @@
   <make>psk31_modulator_bc(
     samp_per_sym=$samp_per_sym,
 )</make>
-  <callback>set_samp_per_sym($samp_per_sym)</callback>
   <param>
     <name>Samples per Symbol</name>
     <key>samp_per_sym</key>

@@ -14,10 +14,8 @@ class qa_psk31_modulator_bc(gr_unittest.TestCase):
 
     def test_loopback(self):
         test_string = "the quick brown fox jumps over the lazy dog"
-        test_sequence = map(ord, test_string)
 
-
-        source = blocks.vector_source_b([0]*16 + map(ord, test_string)*2)
+        source = blocks.vector_source_b([0]*32 + map(ord, test_string)*2)
         sink = blocks.vector_sink_b()
 
         self.tb.connect(
@@ -36,7 +34,10 @@ class qa_psk31_modulator_bc(gr_unittest.TestCase):
 
         string_data_out = ''.join(chr(c) for c in sink.data())
 
-        self.assertTrue(test_string in string_data_out, "test string not in output %r" % (string_data_out,))
+        self.assertTrue(
+            test_string in string_data_out,
+            "test string not in output %r" % (string_data_out,),
+        )
 
 
 if __name__ == '__main__':

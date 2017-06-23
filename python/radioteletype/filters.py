@@ -2,6 +2,8 @@ from __future__ import division
 
 from math import sin, cos, pi
 
+from gnuradio.filter import firdes
+
 
 def normalized_sinc(x):
     x *= pi
@@ -75,17 +77,6 @@ def extended_raised_cos(
     return _normalize_gain(taps, gain)
 
 
-def raised_cos_impulse(length):
-    '''Return a raised cosine impulse of given length.
-
-    Not to be confused with a raised cosine filter, which has a raised cosine
-    frequency response.
-
-    The PSK31 pulse shape is one of these of twice the symbol length.
-    '''
-    return [(cos(j * 2*pi/length) - 1)/-2 for j in range(length)]
-
-
 # These taps are from the PSKCore DLL, originally licensed under the LGPL. They
 # require 16 samples per symbol. ISI is low, with the amplitude of adjacent
 # pulses being 0.0659 for a pulse with peak amplitude normalized to 1. It has a
@@ -109,3 +100,71 @@ pskcore_filter_taps = (
     -0.010860157, -0.0091398882, -0.0074249976, -0.0058112187, -0.004366817,
     -0.003133466, -0.0021287814, -0.0013507826, -0.00078771292, -0.00049122414,
     4.3453566e-005)
+
+
+def psk31_compromise(samp_per_sym, phases=1):
+    '''Return a receive filter designed to minimize ISI.
+
+    `phases=1` returns an ordinary filter. Higher numbers interpolate the
+    filter for polyphase clock recovery, etc.
+
+    PSK31 transmits symbols with a raised cosine pulse shape. Note this
+    isn't a raised-cosine filter: it's a raised cosine impulse.
+
+    While more reasonable PSK transmissions use (almost always) a
+    root-raised-cosine (that's a raised cosine in the frequency domain)
+    filter so the matched filter is zero-ISI, PSK31's transmit filter
+    means a matched filter in the receiver would have severe ISI.
+
+    The raised cosine pulse shape also has an infinitely wide frequency
+    response, no matter how ideally the filter is realized. For the typical
+    case of many PSK31 signals all crammed into one 3kHz channel, this is
+    unfortunate.
+
+    This is a compromise filter which attempts to maximize:
+
+    - capturing the maximum transmitted energy
+    - minimizing ISI
+    - a narrow passband to reject adjacent interfering signals
+
+    This filter was developed using the highly advanced method of manually
+    twiddling the cutoff and transition parameters until it looked good. A
+    Hann windowed sinc filter seems to perform especially well, probably on
+    account of the Hann function being a raised cosine, though a rigorous
+    analysis has not been made.
+
+    The captured signal energy is 0.23 dB below the matched filter case. A
+    cursory estimation puts ISI on par with `pskcore_filter_taps`.
+    '''
+    return firdes.low_pass(
+        # Polyphase clock sync splits these taps into `phases` phases,
+        # so the gain must be `phases` for each to have unity gain.
+        gain=phases,
+
+        # This block doesn't need to know sampling or symbol rates -- it
+        # only needs to know how many samples are in a signal. If it helps,
+        # think of setting sampling_freq=samp_per_sym as normalizing
+        # everything to a 1 Hz sample rate, and a 1 Hz symbol rate.
+        #
+        # And then multiply that by `phases` to generate the multiple
+        # phases for clock sync.
+        sampling_freq=samp_per_sym * phases,
+
+        # Cutoff frequency = transition width = symbol rate
+        cutoff_freq=0.68144,
+        transition_width=0.36224,
+
+        window=firdes.WIN_HANN,
+    )
+
+
+def psk31_matched(samp_per_sym, phases=1):
+    '''Return matched filter taps for PSK31
+
+    It's just a raised cosine impulse, AKA Hann function. Specifying a `phases`
+    greater than 1 interpolates the filter for use with polyphase clock sync,
+    etc.
+    '''
+    window_size = 2 * samp_per_sym * phases + 1
+    taps = firdes.window(firdes.WIN_HANN, window_size, 0)[:-1]
+    return _normalize_gain(taps, phases)
