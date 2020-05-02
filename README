@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbitglue%2Fgr-radioteletype.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbitglue%2Fgr-radioteletype?ref=badge_shield)
+
                                _ _       _       _      _                    
   __ _ _ __      _ __ __ _  __| (_) ___ | |_ ___| | ___| |_ _   _ _ __   ___ 
  / _` | '__|____| '__/ _` |/ _` | |/ _ \| __/ _ \ |/ _ \ __| | | | '_ \ / _ \
@@ -71,3 +73,7 @@ radioteletype.modulators.varicode_encode_bb
 radioteletype.modulators.psk31_modulator_bc
 
   Bits in, modulated PSK31 out.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbitglue%2Fgr-radioteletype.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbitglue%2Fgr-radioteletype?ref=badge_large)
