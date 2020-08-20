@@ -5,7 +5,7 @@ from gnuradio.filter import interp_fir_filter_fcc, interp_fir_filter_fff
 from gnuradio.analog import frequency_modulator_fc
 from math import pi
 
-from radioteletype_swig import baudot_encode_bb, varicode_encode_bb
+from .radioteletype_swig import baudot_encode_bb, varicode_encode_bb
 from radioteletype.filters import psk31_matched
 
 

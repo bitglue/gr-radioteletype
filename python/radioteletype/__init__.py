@@ -1,4 +1,5 @@
-# Copyright 2017 Phil Frost.
+#
+# Copyright 2008,2009 Free Software Foundation, Inc.
 #
 # This application is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,9 +14,22 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
 
-'''GNU Radio radioteletype module.
+# The presence of this file turns this directory into a Python package
 
-These blocks can be used to implement a variety of radioteletype (RTTY)
-demodulators.
 '''
+This is the GNU Radio RADIOTELETYPE module. Place your Python package
+description here (python/__init__.py).
+'''
+from __future__ import unicode_literals
+
+# import swig generated symbols into the radioteletype namespace
+try:
+    # this might fail if the module is python-only
+    from .radioteletype_swig import *
+except ImportError:
+    pass
+
+# import any pure python here
+#
