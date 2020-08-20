@@ -6,7 +6,7 @@ from gnuradio import blocks, digital
 from gnuradio import gr
 from gnuradio.filter import freq_xlating_fft_filter_ccc
 from radioteletype import filters
-from radioteletype_swig import (
+from .radioteletype_swig import (
     async_word_extractor_bb,
     baudot_decode_bb,
     varicode_decode_bb,
