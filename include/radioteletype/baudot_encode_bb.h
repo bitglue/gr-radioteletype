@@ -36,7 +36,7 @@ namespace gr {
     class RADIOTELETYPE_API baudot_encode_bb : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<baudot_encode_bb> sptr;
+      typedef std::shared_ptr<baudot_encode_bb> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of radioteletype::baudot_encode_bb.

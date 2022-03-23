@@ -1,21 +1,23 @@
-# Copyright 2017 Phil Frost.
 #
-# This application is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3, or (at your option)
-# any later version.
+# Copyright 2008,2009 Free Software Foundation, Inc.
 #
-# This application is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-'''GNU Radio radioteletype module.
+# The presence of this file turns this directory into a Python package
 
-These blocks can be used to implement a variety of radioteletype (RTTY)
-demodulators.
 '''
+This is the GNU Radio RADIOTELETYPE module. Place your Python package
+description here (python/__init__.py).
+'''
+import os
+
+# import pybind11 generated symbols into the radioteletype namespace
+try:
+    # this might fail if the module is python-only
+    from .radioteletype_python import *
+except ModuleNotFoundError:
+    pass
+
+# import any pure python here
+#

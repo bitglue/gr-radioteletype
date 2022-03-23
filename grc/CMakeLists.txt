@@ -18,18 +18,18 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    radioteletype_rms_agc_cc.xml
-    radioteletype_psk31_coherent_demodulator_cc.xml
-    radioteletype_psk31_incoherent_demodulator_cc.xml
-    radioteletype_psk31_constellation_decoder_cb.xml
-    radioteletype_psk31_modulator_bc.xml
-    radioteletype_am_fsk_mod_bc.xml
-    radioteletype_fm_fsk_mod_bc.xml
-    radioteletype_async_word_extractor_bb.xml
-    radioteletype_baudot_decode_bb.xml
-    radioteletype_rtty_demod_cb.xml
-    radioteletype_tone_detector_cf.xml
-    radioteletype_varicode_decode_bb.xml
-    radioteletype_varicode_encode_bb.xml
-    radioteletype_baudot_encode_bb.xml DESTINATION share/gnuradio/grc/blocks
+    radioteletype_rms_agc_cc.block.yml
+    radioteletype_psk31_coherent_demodulator_cc.block.yml
+    radioteletype_psk31_incoherent_demodulator_cc.block.yml
+    radioteletype_psk31_constellation_decoder_cb.block.yml
+    radioteletype_psk31_modulator_bc.block.yml
+    radioteletype_am_fsk_mod_bc.block.yml
+    radioteletype_fm_fsk_mod_bc.block.yml
+    radioteletype_async_word_extractor_bb.block.yml
+    radioteletype_baudot_decode_bb.block.yml
+    radioteletype_rtty_demod_cb.block.yml
+    radioteletype_tone_detector_cf.block.yml
+    radioteletype_varicode_decode_bb.block.yml
+    radioteletype_varicode_encode_bb.block.yml
+    radioteletype_baudot_encode_bb.block.yml DESTINATION share/gnuradio/grc/blocks
 )
