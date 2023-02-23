@@ -30,7 +30,8 @@ outputs:
     dtype: float
 
 templates:
-    imports: from gnuradio.radioteletype.demodulators import tone_detector_cf
+    imports: from gnuradio.radioteletype.demodulators import tone_detector_cf \
+             import gnuradio.radioteletype as radioteletype
     make: radioteletype.tone_detector_cf(${decim}, ${center_freq}, ${sample_rate},
         ${baud_rate}, ${alpha})
 
