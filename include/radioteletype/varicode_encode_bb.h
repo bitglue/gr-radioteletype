@@ -36,7 +36,7 @@ namespace gr {
     class RADIOTELETYPE_API varicode_encode_bb : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<varicode_encode_bb> sptr;
+      typedef std::shared_ptr<varicode_encode_bb> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of radioteletype::varicode_encode_bb.

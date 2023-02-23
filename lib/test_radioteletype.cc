@@ -27,7 +27,7 @@
 #include <cppunit/TextTestRunner.h>
 #include <cppunit/XmlOutputter.h>
 
-#include <gnuradio/unittests.h>
+#include <unittests.h>
 #include "qa_radioteletype.h"
 #include <iostream>
 #include <fstream>
